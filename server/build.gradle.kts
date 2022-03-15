@@ -1,8 +1,9 @@
-val ktor_version: String by project
+val ktorVersion: String by project
 
 plugins {
     kotlin("jvm")
     id("application")
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "dev.antonius"
@@ -17,9 +18,23 @@ application {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    // Ktor core and basic plugins
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+
+    // Serialization
+    implementation("io.ktor:ktor-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+
+    // Logging
     implementation("ch.qos.logback:logback-classic:1.2.11")
+
+    // Project
+    implementation(project(":entities"))
+
+    // Standard Library
     implementation(kotlin("stdlib"))
 }
 

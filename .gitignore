@@ -1,0 +1,11 @@
+# Project exclude paths
+/.gradle/
+/compose-app/android/build/
+/compose-app/common/build/
+/compose-app/desktop/build/
+/entities/build/
+/server/build/
+/build/
+
+# IntelliJ
+/.idea/

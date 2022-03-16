@@ -18,9 +18,15 @@ dependencies {
 
 kotlin {
     jvm()
-    js {
+    /* js {
         browser()
-    }
+    } */
+
+    macosX64()
+    macosArm64()
+    iosArm64()
+    iosX64()
+    iosSimulatorArm64()
 
     sourceSets {
         val commonMain by getting {
@@ -36,7 +42,7 @@ kotlin {
             }
         }
 
-        val jsMain by getting
+        // val jsMain by getting
         val jvmMain by getting
     }
 }

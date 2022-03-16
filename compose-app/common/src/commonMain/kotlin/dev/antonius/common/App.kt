@@ -32,6 +32,11 @@ fun App() {
     }
 }
 
+/**
+ * Please do not use a singleton for this in a real application and do not call this from your views directly.
+ * Instead, build a view model for fragment-like view components which get their dependencies (like a TodoRepository)
+ * injected through their constructor or with a dependency-injection framework.
+ */
 object TodoItemService {
     val client = HttpClient() {
         install(ContentNegotiation) {

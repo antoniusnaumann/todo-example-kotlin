@@ -9,10 +9,12 @@ pluginManagement {
 }
 rootProject.name = "todo-example-kotlin"
 
-include(":compose-app")
-include(":compose-app:android")
-include(":compose-app:common")
-include(":compose-app:desktop")
 include(":entities")
 include(":server")
-include(":swiftui-app")
+include(":client")
+
+include(":client:compose-app")
+include(":client:compose-app:android")
+include(":client:compose-app:common")
+include(":client:compose-app:desktop")
+include(":client:swiftui-app")

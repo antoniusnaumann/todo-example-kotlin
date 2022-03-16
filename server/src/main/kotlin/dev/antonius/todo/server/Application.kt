@@ -22,7 +22,7 @@ fun main() {
     app.todoService.putTodo(TodoItem(3, "Turn oven off", "..or your house is on fire"))
 
     // For real life use cases, you should probably use a [HOCON file](https://ktor.io/docs/configurations.html#hocon-file)
-    embeddedServer(Netty, port = 8080) {
+    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         install(ContentNegotiation) {
             json()
         }

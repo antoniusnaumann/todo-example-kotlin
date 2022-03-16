@@ -32,6 +32,8 @@ fun App() {
     }
 }
 
+expect val localhost: String
+
 /**
  * Please do not use a singleton for this in a real application and do not call this from your views directly.
  * Instead, build a view model for fragment-like view components which get their dependencies (like a TodoRepository)
@@ -44,5 +46,5 @@ object TodoItemService {
         }
     }
 
-    suspend fun fetchTodos(): List<TodoItem> = client.get("http://0.0.0.0:8080/todos").body()
+    suspend fun fetchTodos(): List<TodoItem> = client.get("http://$localhost:8080/todos").body()
 }

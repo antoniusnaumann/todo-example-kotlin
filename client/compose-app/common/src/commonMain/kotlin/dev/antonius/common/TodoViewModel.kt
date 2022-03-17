@@ -12,17 +12,20 @@ class TodoViewModel(
 ): PlatformViewModel() {
     var todos by mutableStateOf(listOf<TodoItem>())
 
-    fun fetchTodos() {
-        defaultScope.launch {
-            todos = todoService.fetch()
+    fun fetchTodos() = defaultScope.launch {
+        todos = todoService.fetch()
+    }
+
+    fun deleteTodo(item: TodoItem) = defaultScope.launch {
+        if (todoService.delete(item)) {
+            todos = todos.toMutableList().apply { remove(item) }
         }
     }
 
-    fun deleteTodo(item: TodoItem) {
-        defaultScope.launch {
-            if (todoService.delete(item)) {
-                todos = todos.toMutableList().apply { remove(item) }
-            }
-        }
+    fun addTodo(title: String) = defaultScope.launch {
+        val item = TodoItem(-1, title, "Created in Compose app")
+        val id = todoService.create(item)
+
+        todos = todos + item.copy(id = id)
     }
 }

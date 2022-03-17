@@ -1,7 +1,5 @@
 import org.jetbrains.compose.compose
 
-val ktorVersion: String by project
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose") version "1.1.1"
@@ -20,20 +18,13 @@ kotlin {
     }
     sourceSets {
         val commonMain by getting {
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             dependencies {
                 api(compose.runtime)
                 api(compose.foundation)
-                api(compose.material)
-                implementation(project(":entities"))
+                api(compose.material3)
 
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-serialization:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation(project(":client:shared"))
             }
         }
         val commonTest by getting {

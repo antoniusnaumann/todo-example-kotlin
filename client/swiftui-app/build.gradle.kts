@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
+
 plugins {
     kotlin("multiplatform")
 }
@@ -13,12 +15,19 @@ kotlin {
         it.binaries.framework {
             baseName = "Client"
         }
+
+        it.binaries
+            .filterIsInstance<Framework>()
+            .forEach { framework ->
+                framework.transitiveExport = true
+                framework.export(project(":client:shared"))
+            }
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":entities"))
+                api(project(":client:shared"))
             }
         }
         val commonTest by getting {

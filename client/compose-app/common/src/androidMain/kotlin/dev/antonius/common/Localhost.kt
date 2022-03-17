@@ -1,3 +1,3 @@
 package dev.antonius.common
 
-actual val localhost: String = "10.0.2.2"
+actual val localhost: String = "http://10.0.2.2"

@@ -1,15 +1,19 @@
 package dev.antonius.common
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import dev.antonius.todo.client.service.TodoItemService
 import dev.antonius.todo.entities.TodoItem
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.request.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.launch
 
 @Composable
@@ -17,34 +21,37 @@ fun App() {
     var todos by remember { mutableStateOf(listOf<TodoItem>()) }
     val scope = rememberCoroutineScope()
 
-    Column {
+    Column(
+        Modifier.fillMaxWidth().padding(vertical = 64.dp, horizontal = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            todos.forEach { TodoItemView(it) }
+        }
+
+        Spacer(Modifier.weight(1f))
+
         Button(onClick = {
             scope.launch {
-                todos = TodoItemService.fetchTodos()
+                todos = Services.todoService.fetchTodos()
             }
         }) {
             Text("Refresh")
         }
+    }
+}
 
-        todos.forEach {
-            Text(it.title)
-        }
+@Composable
+fun TodoItemView(item: TodoItem) {
+    Column {
+        Text(item.title, style = MaterialTheme.typography.titleMedium)
+        Text(item.details, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
 expect val localhost: String
 
-/**
- * Please do not use a singleton for this in a real application and do not call this from your views directly.
- * Instead, build a view model for fragment-like view components which get their dependencies (like a TodoRepository)
- * injected through their constructor or with a dependency-injection framework.
- */
-object TodoItemService {
-    val client = HttpClient() {
-        install(ContentNegotiation) {
-            json()
-        }
-    }
-
-    suspend fun fetchTodos(): List<TodoItem> = client.get("http://$localhost:8080/todos").body()
+// Please instantiate those dependencies properly in your view models instead of doing this
+object Services {
+    val todoService = TodoItemService("$localhost:8080")
 }

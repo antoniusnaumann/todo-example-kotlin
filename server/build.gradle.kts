@@ -32,7 +32,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.11")
 
     // Project
-    implementation(project(":entities"))
+    implementation(project(":shared:entities"))
 
     // Standard Library
     implementation(kotlin("stdlib"))

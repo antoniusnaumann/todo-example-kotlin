@@ -18,8 +18,16 @@ class TodoViewModel: ObservableObject {
     }
 
     func fetch() {
-        todoService.fetchTodos { items, error in
+        todoService.fetch { items, error in
             self.todos = items ?? self.todos
+        }
+    }
+
+    func delete(item: TodoItem) {
+        todoService.delete(item: item) { success, error in
+            if success == true {
+                self.todos.removeAll { $0.id == item.id }
+            }
         }
     }
 }

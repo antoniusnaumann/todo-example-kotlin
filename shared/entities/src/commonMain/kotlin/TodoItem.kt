@@ -4,7 +4,7 @@ import kotlinx.serialization.*
 
 @Serializable
 data class TodoItem(
-    val id: Int,
+    override val id: Int,
     val title: String,
     val details: String,
-)
+): IdentifiableEntity<Int>()

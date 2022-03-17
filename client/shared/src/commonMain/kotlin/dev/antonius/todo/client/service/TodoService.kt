@@ -6,8 +6,6 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 
 class TodoItemService(
-    val baseUrl: String,
-    val client: HttpClient = defaultClient()
-) {
-    suspend fun fetchTodos(): List<TodoItem> = client.get("$baseUrl/todos").body()
-}
+    baseUrl: String,
+    client: HttpClient = defaultClient()
+): ResourceApiService<Int, TodoItem>(baseUrl, "todos", { setBody(it) }, { body() }, { body() }, client)

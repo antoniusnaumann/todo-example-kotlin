@@ -1,13 +1,7 @@
 package dev.antonius.common
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,14 +20,22 @@ fun App() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            todos.forEach { TodoItemView(it) }
+            todos.forEach { item ->
+                TodoItemView(item) {
+                    scope.launch {
+                        if (Services.todoService.delete(item)) {
+                            todos = todos.toMutableList().apply { remove(item) }
+                        }
+                    }
+                }
+            }
         }
 
         Spacer(Modifier.weight(1f))
 
         Button(onClick = {
             scope.launch {
-                todos = Services.todoService.fetchTodos()
+                todos = Services.todoService.fetch()
             }
         }) {
             Text("Refresh")
@@ -42,10 +44,18 @@ fun App() {
 }
 
 @Composable
-fun TodoItemView(item: TodoItem) {
-    Column {
-        Text(item.title, style = MaterialTheme.typography.titleMedium)
-        Text(item.details, style = MaterialTheme.typography.bodyMedium)
+fun TodoItemView(item: TodoItem, delete: () -> Unit) {
+    Row {
+        Column {
+            Text(item.title, style = MaterialTheme.typography.titleMedium)
+            Text(item.details, style = MaterialTheme.typography.bodyMedium)
+        }
+
+        Spacer(Modifier.weight(1f))
+
+        IconButton(onClick = delete) {
+            Text("X", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.error)
+        }
     }
 }
 

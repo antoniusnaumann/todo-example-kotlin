@@ -36,6 +36,8 @@ kotlin {
             dependencies {
                 api("androidx.appcompat:appcompat:1.4.1")
                 api("androidx.core:core-ktx:1.7.0")
+                api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
             }
         }
         val androidTest by getting {
@@ -46,6 +48,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 api(compose.preview)
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.0")
             }
         }
         val desktopTest by getting

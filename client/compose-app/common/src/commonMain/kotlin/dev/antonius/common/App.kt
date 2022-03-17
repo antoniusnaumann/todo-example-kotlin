@@ -1,50 +1,46 @@
 package dev.antonius.common
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.antonius.todo.client.service.TodoItemService
 import dev.antonius.todo.entities.TodoItem
-import kotlinx.coroutines.launch
+
+expect val localhost: String
 
 @Composable
 fun App() {
-    var todos by remember { mutableStateOf(listOf<TodoItem>()) }
-    val scope = rememberCoroutineScope()
+    val viewModel = remember {
+        TodoViewModel(TodoItemService("$localhost:8080"))
+    }
 
     Column(
         Modifier.fillMaxWidth().padding(vertical = 64.dp, horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            todos.forEach { item ->
-                TodoItemView(item) {
-                    scope.launch {
-                        if (Services.todoService.delete(item)) {
-                            todos = todos.toMutableList().apply { remove(item) }
-                        }
-                    }
-                }
+            viewModel.todos.forEach { item ->
+                TodoItemView(item, viewModel::deleteTodo)
             }
         }
 
         Spacer(Modifier.weight(1f))
 
-        Button(onClick = {
-            scope.launch {
-                todos = Services.todoService.fetch()
-            }
-        }) {
+        Button(onClick = viewModel::fetchTodos) {
             Text("Refresh")
         }
     }
 }
 
 @Composable
-fun TodoItemView(item: TodoItem, delete: () -> Unit) {
+fun TodoItemView(item: TodoItem, delete: (TodoItem) -> Unit) {
     Row {
         Column {
             Text(item.title, style = MaterialTheme.typography.titleMedium)
@@ -53,15 +49,8 @@ fun TodoItemView(item: TodoItem, delete: () -> Unit) {
 
         Spacer(Modifier.weight(1f))
 
-        IconButton(onClick = delete) {
+        IconButton(onClick = { delete(item) }) {
             Text("X", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.error)
         }
     }
-}
-
-expect val localhost: String
-
-// Please instantiate those dependencies properly in your view models instead of doing this
-object Services {
-    val todoService = TodoItemService("$localhost:8080")
 }

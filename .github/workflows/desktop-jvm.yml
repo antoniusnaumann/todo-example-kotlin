@@ -24,3 +24,27 @@ jobs:
         run: chmod +x gradlew
       - name: Build Compose Desktop app with Gradle
         run: ./gradlew :client:compose-app:desktop:build
+
+  package:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - name: Linux
+            os: debian-latest
+            package: packageDeb
+            gradle: sh ./gradlew
+          - name: Windows
+            os: windows-latest
+            package: packageMsi
+            gradle: gradlew.bat
+          - name: macOS
+            os: macos-latest
+            package: packageDmg
+            gradle: sh ./gradlew
+
+    steps:
+      - name: Package for ${{ matrix.name }}
+        run: ${{ matrix.gradle}} :client:compose-app:desktop:${{ matrix.package }}

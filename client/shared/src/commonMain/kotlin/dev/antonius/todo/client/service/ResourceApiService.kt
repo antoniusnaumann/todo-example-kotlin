@@ -29,17 +29,17 @@ abstract class ResourceApiService<ID, R: IdentifiableEntity<ID>>(
     val getIdAsBody: suspend HttpResponse.() -> ID,
     val client: HttpClient = defaultClient(),
 ) {
-    suspend fun fetch(): List<R> = client.get("$baseUrl/todos").getResourceAsBody()
+    suspend fun fetch(): List<R> = client.get("$baseUrl/$resource").getResourceAsBody()
 
-    suspend fun create(item: R): ID = client.post("$baseUrl/todos") {
+    suspend fun create(item: R): ID = client.post("$baseUrl/$resource") {
         contentType(ContentType.Application.Json)
         setResourceAsBody(item)
     }.getIdAsBody()
 
-    suspend fun put(item: R): Boolean = client.put("$baseUrl/todos/${item.id}") {
+    suspend fun update(item: R): Boolean = client.put("$baseUrl/$resource/${item.id}") {
         contentType(ContentType.Application.Json)
         setResourceAsBody(item)
     }.status.run { this == HttpStatusCode.OK || this == HttpStatusCode.Created }
 
-    suspend fun delete(item: R) = client.delete("$baseUrl/todos/${item.id}").status == HttpStatusCode.OK
+    suspend fun delete(item: R) = client.delete("$baseUrl/$resource/${item.id}").status == HttpStatusCode.OK
 }

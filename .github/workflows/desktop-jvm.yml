@@ -33,18 +33,31 @@ jobs:
       matrix:
         include:
           - name: Linux
-            os: debian-latest
+            os: ubuntu-latest
             package: packageDeb
-            gradle: sh ./gradlew
+            gradle: ./gradlew
           - name: Windows
             os: windows-latest
             package: packageMsi
-            gradle: gradlew.bat
+            gradle: .\gradlew
           - name: macOS
             os: macos-latest
             package: packageDmg
-            gradle: sh ./gradlew
+            gradle: ./gradlew
 
     steps:
+      - uses: actions/checkout@v2
+
+      - name: set up JDK 16
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        if: matrix.os != 'windows-latest'
+
       - name: Package for ${{ matrix.name }}
         run: ${{ matrix.gradle}} :client:compose-app:desktop:${{ matrix.package }}

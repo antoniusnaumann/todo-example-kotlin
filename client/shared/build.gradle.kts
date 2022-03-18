@@ -1,4 +1,5 @@
 val ktorVersion: String by project
+val serializationVersion: String by project
 
 plugins {
     kotlin("multiplatform")
@@ -34,8 +35,8 @@ kotlin {
                 api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 api("io.ktor:ktor-client-serialization:$ktorVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
                 api("io.ktor:ktor-client-cio:$ktorVersion")
 
                 api(project(":shared:entities"))

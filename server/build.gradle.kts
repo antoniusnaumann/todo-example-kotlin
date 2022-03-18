@@ -1,4 +1,5 @@
 val ktorVersion: String by project
+val serializationVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -26,7 +27,7 @@ dependencies {
     // Serialization
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:1.2.11")
